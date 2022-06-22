@@ -13,10 +13,46 @@ struct HomeView: View {
     
     var body: some View {
         
-        
-        Text("Hello, world!")
-            .padding()
-        
+        NavigationView {
+            
+            VStack (alignment: .leading, spacing: 20){
+                
+                Text("What du you want to do")
+                    .padding(.leading, 20)
+                
+                ScrollView {
+                    LazyVStack{
+                        ForEach(model.modules) {module in
+                            
+                            VStack (spacing: 20){
+                                
+                                NavigationLink {
+                                    ContentView()
+                                        .onAppear {
+                                            model.beginModule(module.id)
+                                        }
+                                } label: {
+                                   
+                                    HomeViewRow(image: module.content.image, category: module.category, description: module.content.description, number: String(module.content.lessons.count) + " lessons", time: module.content.time)
+                                    
+                                    
+                                    
+                                }
+                                
+                                
+                                
+                                
+                                
+                                HomeViewRow(image: module.test.image, category: "\(module.category) Test", description: module.test.description, number: String(module.test.questions.count) + " questions", time: module.test.time)
+                            }
+                            
+                        }
+                    }
+                    .accentColor(.black)
+                }.padding()
+            }.navigationTitle("Get started")
+            
+        }
         
     }
 }
@@ -24,5 +60,6 @@ struct HomeView: View {
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
         HomeView()
+            .environmentObject(ContentModel())
     }
 }
